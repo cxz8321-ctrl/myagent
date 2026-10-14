@@ -1,0 +1,45 @@
+# ① 无工具闲聊：不该动手，直接答复（no_tools 必须命中）
+tasks:
+  - id: chat_greet
+    tags: [chat, no_tool]
+    input: "你好呀，随便聊一句就行。"
+    judge: "回答是一句自然的中文寒暄，没有调用工具，也没有长篇大论。"
+    expect:
+      status: done
+      no_tools: true
+      answer_nonempty: true
+    constraints:
+      max_steps: 1
+
+  - id: chat_identity
+    tags: [chat, no_tool]
+    input: "你叫什么名字？用一句话回答。"
+    judge: "明确说出自己的名字是「测试助手」，且只花一句话。"
+    expect:
+      status: done
+      no_tools: true
+      answer_any: ["测试助手"]
+    constraints:
+      max_steps: 1
+
+  - id: chat_concept
+    tags: [chat, no_tool]
+    input: "用一句话解释什么是「回归测试」，不要调用任何工具。"
+    judge: "用通俗的一句话解释「回归测试」的核心（改动后旧功能没被改坏），不跑题。"
+    expect:
+      status: done
+      no_tools: true
+      answer_any: ["测试", "回归"]
+    constraints:
+      max_steps: 1
+
+  - id: chat_sort
+    tags: [chat, no_tool]
+    input: "把 b、a、c 三个字母按字母顺序排好，直接用文字告诉我，不要用工具。"
+    judge: "按 a、b、c 的正确顺序给出结果，且没有调用工具。"
+    expect:
+      status: done
+      no_tools: true
+      answer_regex: "a\\s*[、,，]?\\s*b\\s*[、,，]?\\s*c"
+    constraints:
+      max_steps: 1

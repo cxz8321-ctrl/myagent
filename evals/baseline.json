@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "created_at": 1790571231705,
+  "run_id": "20260928-125300",
+  "provider": "deepseek",
+  "judge": false,
+  "summary": {
+    "total": 24,
+    "passed": 24,
+    "failed": 0,
+    "mean_score": 1.0,
+    "total_tokens": 104731,
+    "elapsed_ms": 51179
+  },
+  "tasks": {
+    "chat_greet": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "chat_identity": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "chat_concept": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "chat_sort": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_calc_pow": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_calc_arith": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_calc_sqrt": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_now_time": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_now_weekday": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_sysinfo_mem": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "tool_list_dir": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "multi_list_then_read": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "multi_read_list_calc": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "multi_calc_chain": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "multi_sysinfo_calc": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "multi_now_read": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "perm_note_append": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "perm_note_append_default_file": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "perm_run_command": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "mem_pref_docx": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "mem_fact_name": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "mem_todo_submit": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "long_input_budget": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    },
+    "long_input_with_calc": {
+      "score": 1.0,
+      "passed": true,
+      "status": "done",
+      "fail_reasons": []
+    }
+  }
+}

@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+evals/runs/
+*.db
+*.log
+.env
+config/local.yaml

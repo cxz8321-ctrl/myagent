@@ -1,0 +1,51 @@
+# ③ 多步：至少 2 次工具调用，且顺序符合任务描述
+tasks:
+  - id: multi_list_then_read
+    tags: [multi_step, list_dir, read_file]
+    input: "先列一下 config 目录里有哪些文件，然后读一下 config.yaml，告诉我默认 provider 是哪个。"
+    expect:
+      status: done
+      tools: [list_dir, read_file]
+      answer_any: ["deepseek"]
+    constraints:
+      max_steps: 6
+
+  - id: multi_read_list_calc
+    tags: [multi_step, read_file, list_dir, calc]
+    input: "读一下 README.md 看看这个项目是做什么的，然后列一下 skillpacks 目录里有哪些技能，最后用 calc 算 2+2。"
+    expect:
+      status: done
+      tools: [read_file, list_dir, calc]
+      answer_all: ["4"]
+    constraints:
+      max_steps: 8
+
+  - id: multi_calc_chain
+    tags: [multi_step, calc]
+    input: "用 calc 先算 5 的阶乘，再对算出来的结果用 calc 求平方根。"
+    expect:
+      status: done
+      tools: [calc, calc]
+      answer_nonempty: true
+    constraints:
+      max_steps: 6
+
+  - id: multi_sysinfo_calc
+    tags: [multi_step, sys_info, calc]
+    input: "用 sys_info 看磁盘可用空间（GB），然后用 calc 把这个可用 GB 数字乘以 2。"
+    expect:
+      status: done
+      tools: [sys_info, calc]
+      answer_nonempty: true
+    constraints:
+      max_steps: 6
+
+  - id: multi_now_read
+    tags: [multi_step, now, read_file]
+    input: "先用 now 看当前时间，再读一下 config/prompts/system.md，告诉我文件里写的版本号是什么。"
+    expect:
+      status: done
+      tools: [now, read_file]
+      answer_any: ["v2"]
+    constraints:
+      max_steps: 6

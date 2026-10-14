@@ -1,0 +1,44 @@
+# ⑤ 记忆写入 → 跨会话召回：第 1 轮沉淀，第 2 轮换新 session 再问（memory_hits 必须 > 0）
+tasks:
+  - id: mem_pref_docx
+    tags: [memory, cross_session]
+    input: "请记住：我以后交付文档统一用 docx 格式。"
+    turns:
+      - "请记住：我以后交付文档统一用 docx 格式。"
+      - "我交付文档偏好用什么格式？"
+    expect:
+      status: done
+      memory_written: true
+      memory_hits: true
+      answer_any: ["docx"]
+    constraints:
+      max_steps: 4
+
+  - id: mem_fact_name
+    tags: [memory, cross_session]
+    input: "记住：我叫小林，现在住在杭州。"
+    turns:
+      - "记住：我叫小林，现在住在杭州。"
+      - "我叫什么名字？住在哪个城市？"
+    expect:
+      status: done
+      memory_written: true
+      memory_hits: true
+      answer_all: ["小林"]
+      answer_any: ["杭州"]
+    constraints:
+      max_steps: 4
+
+  - id: mem_todo_submit
+    tags: [memory, cross_session]
+    input: "记一下待办：周五之前提交 M4 评测报告。"
+    turns:
+      - "记一下待办：周五之前提交 M4 评测报告。"
+      - "我有什么待办？"
+    expect:
+      status: done
+      memory_written: true
+      memory_hits: true
+      answer_any: ["M4", "评测", "周五"]
+    constraints:
+      max_steps: 4

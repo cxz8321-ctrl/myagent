@@ -1,0 +1,28 @@
+# ⑥ 超长输入不炸：塞入远超上下文预算的噪声，任务仍应正常收敛（不被撑爆）
+tasks:
+  - id: long_input_budget
+    tags: [long_input, context]
+    input: "下面会给你一大段无关材料。读完以后只用一句话回答：你读完没有？"
+    input_pad:
+      text: "这是一段用来测试上下文预算的填充文本，本身没有意义，只是很长。"
+      repeat: 1000
+    expect:
+      status: done
+      answer_nonempty: true
+    constraints:
+      max_steps: 3
+      no_error: true
+
+  - id: long_input_with_calc
+    tags: [long_input, context, calc]
+    input_prefix:
+      text: "噪音材料：以下内容与问题无关，请忽略。"
+      repeat: 1000
+    input: "先忽略上面的所有无关内容。然后用 calc 算 6*7 等于多少。"
+    expect:
+      status: done
+      tools: [calc]
+      answer_any: ["42"]
+    constraints:
+      max_steps: 4
+      no_error: true

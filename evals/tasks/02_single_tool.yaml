@@ -1,0 +1,71 @@
+# ② 单工具：calc / now / sys_info / list_dir 二选一
+tasks:
+  - id: tool_calc_pow
+    tags: [single_tool, calc]
+    input: "用 calc 工具算一下 3 的 12 次方等于多少。"
+    expect:
+      status: done
+      tools: [calc]
+      answer_any: ["531441"]
+    constraints:
+      max_steps: 3
+
+  - id: tool_calc_arith
+    tags: [single_tool, calc]
+    input: "用 calc 帮我算 (17*23+11)/4 等于多少。"
+    expect:
+      status: done
+      tools: [calc]
+      answer_any: ["100.5"]
+    constraints:
+      max_steps: 3
+
+  - id: tool_calc_sqrt
+    tags: [single_tool, calc]
+    input: "用 calc 算 sqrt(144) 等于多少。"
+    expect:
+      status: done
+      tools: [calc]
+      answer_any: ["12"]
+    constraints:
+      max_steps: 3
+
+  - id: tool_now_time
+    tags: [single_tool, now]
+    input: "现在几点了？用 now 工具看一下。"
+    expect:
+      status: done
+      tools: [now]
+      answer_regex: "\\d{1,2}:\\d{2}"
+    constraints:
+      max_steps: 3
+
+  - id: tool_now_weekday
+    tags: [single_tool, now]
+    input: "今天是星期几？用 now 工具确认一下。"
+    expect:
+      status: done
+      tools: [now]
+      answer_regex: "星期|周[一二三四五六日天]"
+    constraints:
+      max_steps: 3
+
+  - id: tool_sysinfo_mem
+    tags: [single_tool, sys_info]
+    input: "用 sys_info 看一下这台机器的内存占用情况。"
+    expect:
+      status: done
+      tools: [sys_info]
+      answer_any: ["内存"]
+    constraints:
+      max_steps: 3
+
+  - id: tool_list_dir
+    tags: [single_tool, list_dir]
+    input: "用 list_dir 列一下项目根目录（.）下有哪些文件和目录。"
+    expect:
+      status: done
+      tools: [list_dir]
+      answer_any: ["README.md", "config", "agent", "evals"]
+    constraints:
+      max_steps: 3

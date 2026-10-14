@@ -1,0 +1,165 @@
+# 骛（myagent） · 自建智能体 —— 主配置
+# 环境变量覆盖：MASSISTANTGENT__A__B=值  ->  cfg["a"]["b"]
+# 例：MASSISTANTGENT__PROVIDERS__LOCAL__MODEL=qwen3:8b
+
+default_provider: deepseek
+
+providers:
+  deepseek:
+    type: deepseek
+    model: deepseek-chat
+    base_url: https://api.deepseek.com
+    api_key_ref: deepseek        # 去密钥源里找这个名字（见 runtime/secrets.py）
+    timeout_ms: 120000
+    retries: 3
+    temperature: 0.3
+
+  local:
+    type: llamacpp
+    model: qwen3-4b-q4km
+    model_path: ~/.local/models/Qwen3-4B-Q4_K_M.gguf
+    n_ctx: 8192
+    n_threads: 0          # 0 = 自动按核数
+    no_think: true        # 关思考链，CPU 上快很多
+    max_tokens: 1024
+    timeout_ms: 300000
+    retries: 0
+    temperature: 0.6
+
+context:
+  total_tokens: 32768
+  reserve_output: 2048
+  keep_last: 6                 # 最近 6 个单元（含工具往返）永不被裁
+  max_tool_result_chars: 6000  # 单条工具结果上限，超了掐头留尾
+  prompt_dir: config/prompts
+  prompt_name: system
+  weights:
+    system: 0.15
+    memory: 0.25
+    tools: 0.15
+    history: 0.45
+
+# 系统提示模板的变量（config/prompts/system.md 里用 {{name}} 这类占位）
+prompt:
+  name: 骛
+  creature: 一个本地运行的智能体助手
+  style: 说人话、务实、有自己判断，不端不装，不说客套话。
+
+storage:
+  data_dir: data
+  db_file: myagent.db
+  inline_limit: 8192      # 单条内容超过这个字节数就走 blobs 旁路
+  history_load: 12        # 每次开工从 L1 捞回多少条历史
+
+memory:
+  enabled: true
+  user_id: default
+  scope: global           # 作用域：global / project:<名> / session:<id>
+  embed:
+    enabled: true
+    model_path: ~/.local/models/Qwen3-Embedding-0.6B-Q8_0.gguf
+    model_name: qwen3-embedding-0.6b
+    n_ctx: 512
+    query_prefix: ""      # 有些检索模型要 "Instruct: ...\nQuery: "
+  retrieve:
+    top_k: 5              # 宁少勿多：无关片段比缺少片段伤害更大
+    min_score: 0.15
+    weights: {vector: 0.55, keyword: 0.20, recency: 0.15, importance: 0.10}
+  write:
+    enabled: true
+    model_judge: true     # 用模型判"新记忆是否盖掉旧的"
+    max_len: 200          # 单条记忆长度上限（规格书：≤200 字）
+  inject:
+    enabled: true
+    max_chars: 2000
+  summarize:              # 滚动摘要：历史占满窗口七成就压
+    enabled: true
+    trigger_ratio: 0.7
+    keep_last: 8
+  procedural:             # L4：经验文件（人能读能改）
+    enabled: true
+    dir: memory/procedural
+    inject_max_chars: 2000
+
+security:
+  # 派发者（issuer）→ 权限上限：让本 agent 成为"下位"
+  #   调用者(owner) > 上层助理(assistant) > 外部助手(external) > 自身(self) > 未识别(unknown)
+  subjects:
+    default_issuer: owner
+    subjects:
+      owner:   {max_tier: danger, can_grant_persistent: true,  note: 本地管理员}
+      assistant:      {max_tier: write,  can_grant_persistent: false, note: 上层调用者}
+      external:     {max_tier: write,  can_grant_persistent: false, note: 外部编码助手}
+      self:    {max_tier: read,   can_grant_persistent: false, note: 它自己发起的}
+      unknown: {max_tier: read,   can_grant_persistent: false, note: 未识别来源（按最严）}
+  policy:
+    default_tier: danger        # 分级表里没有的工具一律按最严（没有漏网）
+    actions: {read: allow, write: ask, danger: ask}
+    second_confirm: true        # 危险级：二次确认
+    tiers: {}                   # 工具名 -> read|write|danger，覆盖内置表
+    overrides: {}
+  sandbox:
+    enabled: true
+    # 只读根：放宽到系统信息，这样它能答"这台机器什么配置"（仍不含别人的目录）
+    read_roots: ["~", "/tmp", "/proc", "/sys", "/etc/os-release", "/etc/lsb-release",
+                 "/etc/hostname", "/etc/hosts", "/etc/timezone"]
+    write_roots: ["data", "workspace", "/tmp"]    # 写允许的根（相对项目根）
+    # 自我保护：即使落在写根里也永远不许工具写 —— 改自己权限口径 / 碰记忆库
+    protect: ["data/approvals.json", "*.db", "*.db-wal", "*.db-shm", "config/config.yaml"]
+    cmd_allow: [python3, python, ls, cat, head, tail, wc, grep, find, echo, date, pwd, du, df, uname]
+    max_script_seconds: 30
+  approvals:                    # 审批口径：本次/永久/拒绝
+    path: data/approvals.json   # 「永久允许 / 永久拒绝」落这里，跨进程生效
+    allow: []                   # 预置永久允许（工具名列表）
+    deny: []                    # 预置永久拒绝
+
+mcp:                            # 接上任意 MCP server，其工具自动进模型可选列表
+  enabled: true
+  servers: {}                   # 例：
+                                #   demo:
+                                #     command: ["python3", "scripts/test_mcp_server.py"]
+                                #     timeout: 20
+                                #     default_tier: read
+
+# ---- M5 运行时工程 ----
+runtime:
+  tools:
+    parallel: true              # 同一轮里无依赖的工具并行执行；有依赖（depends_on）的严格串行
+    max_workers: 4
+  trace:
+    enabled: true               # 每步 trace 落盘（data/traces/<trace_id>.jsonl，一行一条）
+    dir: data/traces
+  state_machine:
+    strict: false               # 非法状态转移：false=记录不炸；true=直接抛错
+
+# 费用统计单价（token × 单价）。**下面是占位价，实际以各厂商官网为准**，只用于本地观测。
+pricing:
+  currency: CNY
+  unit: 1000000                 # 每 100 万 token 多少钱
+  notes: "占位价，实际以各厂商官网为准；不作对账凭证。"
+  providers:
+    deepseek:
+      input: 2.0                # 占位：约 ¥2 / 百万 输入 token（DeepSeek 实际价格会变）
+      output: 8.0               # 占位：约 ¥8 / 百万 输出 token（DeepSeek 实际价格会变）
+    local:
+      input: 0.0                # 本地推理无 API 费用
+      output: 0.0
+    default:
+      input: 0.0
+      output: 0.0
+
+paths:
+  data_dir: data
+  log_dir: logs
+  skill_dir: skills
+  skill_dirs: [skillpacks, "~/.myagent/skills"]   # SKILL.md 技能包目录
+
+# ---- M7 入口层：HTTP API（规格书 3.8）----
+api:
+  app_name: 骛
+  host: 127.0.0.1
+  port: 8765
+  tokens: []                 # Bearer token 白名单；留空则启动时生成临时 token 并打印
+                             # 也可用环境变量 MASSISTANTGENT_API_TOKEN / MASSISTANTGENT_API_TOKENS（逗号分隔）
+  session_scope: user        # user=同一用户跨入口共用一条会话；channel=按 (渠道,用户) 各一条
+

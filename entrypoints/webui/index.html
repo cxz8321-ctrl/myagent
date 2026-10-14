@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__APP_NAME__</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#111318">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="__APP_NAME__">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="dot" id="dot"></span><b id="app-name">__APP_NAME__</b><span class="sub" id="meta">—</span></div>
+  <div class="acts">
+    <button id="btn-sessions" title="会话">会话</button>
+    <button id="btn-tools" title="工具">工具</button>
+    <button id="btn-set" title="设置">设置</button>
+  </div>
+</header>
+
+<main id="log" aria-live="polite"></main>
+
+<footer>
+  <textarea id="in" rows="1" placeholder="说点什么…（Enter 发送，Shift+Enter 换行）"></textarea>
+  <button id="send">发送</button>
+  <button id="stop" class="ghost" hidden>停止</button>
+</footer>
+
+<aside id="panel" hidden>
+  <div class="panel-head"><b id="panel-title">设置</b><button id="panel-close">✕</button></div>
+  <div id="panel-body"></div>
+</aside>
+
+<script src="/ui/app.js"></script>
+</body>
+</html>
