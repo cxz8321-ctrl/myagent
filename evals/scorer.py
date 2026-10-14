@@ -117,7 +117,7 @@ def score_task(task: Dict[str, Any], result: Dict[str, Any],
 
 def judge_answer(criteria: str, question: str, answer: str, provider: Any) -> Dict[str, Any]:
     """模型判分：按 criteria 给回答打 0~10，归一到 0~1。失败不拖垮评测（记 0 分 + 原因）。"""
-    prompt = ("评分标准：%s\n\n用户问题：%s\n\n助手回答：%s\n\n"
+    prompt = ("评分标准：%s\n\n用户问题：%s\n\n回答文本：%s\n\n"
               "请判断该回答是否满足评分标准，只输出 JSON："
               "{\"score\": 0到10的整数, \"reason\": \"一句话原因\"}" % (criteria, question, _snip(answer, 2000)))
     try:

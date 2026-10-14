@@ -74,8 +74,8 @@ def main() -> int:
     check("tool 与其调用在同一单元", len(paired) == 1 and len(paired[0]) == 2)
 
     print("④ 提示词外置")
-    r = prompts.render("system", {"name": "测试助手", "creature": "AI", "style": "务实", "now": "t", "cwd": "/", "model": "m"})
-    check("能读到文件模板", bool(r["version"]) and r["version"] != "builtin" and "测试助手" in r["text"],
+    r = prompts.render("system", {"name": "测试调用方", "creature": "AI", "style": "务实", "now": "t", "cwd": "/", "model": "m"})
+    check("能读到文件模板", bool(r["version"]) and r["version"] != "builtin" and "测试调用方" in r["text"],
           "version=%s path=%s" % (r["version"], r["path"]))
     r2 = prompts.render("system", {})
     check("缺变量会被报出来", "name" in r2["missing"])

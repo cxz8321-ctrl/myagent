@@ -154,7 +154,7 @@ tools.register(SkillMeta(name="noop", description="无副作用", permission="re
                          handler=lambda a: "ok"))
 loop = AgentLoop(provider=SpyProvider(), tools=tools, context=builder, max_steps=3,
                  store=store2, session_id="dirty-e2e", retriever=None, writer=None,
-                 procedural=None, prompt_vars={"name": "测试助手"}, trace_enabled=False,
+                 procedural=None, prompt_vars={"name": "测试调用方"}, trace_enabled=False,
                  memory_cfg={"summarize": {"enabled": False}})
 res = loop.run({"input": "我是脏输入" + BAD + "结尾"})
 d = res.get("data") or {}

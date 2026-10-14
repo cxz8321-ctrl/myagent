@@ -100,7 +100,7 @@ def build_fake_ctx(tmp):
     context = ContextBuilder(budget=Budget(4096, 512), prompts=prompts, keep_last=4)
     provider = FakeProvider()
     loop = AgentLoop(provider=provider, tools=reg, gate=gate, context=context,
-                     prompt_vars={"name": "测试助手", "creature": "测试助理", "style": "简洁"},
+                     prompt_vars={"name": "测试调用方", "creature": "测试助理", "style": "简洁"},
                      max_steps=4, store=None, retriever=None, writer=None, procedural=None,
                      memory_cfg={"summarize": {"enabled": False}}, ask_callback=None)
     return {"loop": loop, "tools": reg, "gate": gate, "provider_name": "fake",

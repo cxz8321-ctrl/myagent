@@ -2,7 +2,7 @@
 """派发者（issuer）与权限上限：让 myagent 成为"下位"。
 
 调用者权限口径：
-    调用者(owner) > 上层助理(assistant) > 外部助手(external) > 本程序自身(self) > 未识别(unknown)
+    调用者(owner) > 上层调用方(assistant) > 外部助手(external) > 本程序自身(self) > 未识别(unknown)
 
 规则：
   1. **按派发者封顶**：谁派的活，就只能用到那一档权限。
@@ -11,7 +11,7 @@
        self    → read（它自己发起的一切，只读）
        unknown → read（认不出来就当最严格）
   2. **长期授权只有 owner 能给**：「永久允许 / 永久拒绝」这类落盘口径，assistant/external/self 都无权授予，
-     它们只能给"本次允许"。—— 防止上层助理把它养成一把万能钥匙。
+     它们只能给"本次允许"。—— 防止上层调用方把它养成一把万能钥匙。
   3. 判定是纯函数：只比级别、不改状态。
 
 时间：所有判定都是"上限封顶"，不会把低权限抬成高权限。
@@ -30,7 +30,7 @@ RANK: Dict[str, int] = {READ: 1, WRITE: 2, DANGER: 3}
 DEFAULT_SUBJECTS: Dict[str, Dict[str, Any]] = {
     OWNER: {"max_tier": DANGER, "can_grant_persistent": True, "note": "本地管理员"},
     ASSISTANT: {"max_tier": WRITE, "can_grant_persistent": False, "note": "上层调用者"},
-    EXTERNAL: {"max_tier": WRITE, "can_grant_persistent": False, "note": "外部编码助手"},
+    EXTERNAL: {"max_tier": WRITE, "can_grant_persistent": False, "note": "外部编码工具"},
     SELF: {"max_tier": READ, "can_grant_persistent": False, "note": "它自己发起的"},
     UNKNOWN: {"max_tier": READ, "can_grant_persistent": False, "note": "未识别来源（按最严）"},
 }

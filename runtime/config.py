@@ -48,7 +48,7 @@ DEFAULTS: Dict[str, Any] = {
     },
     "prompt": {
         "name": "骛",
-        "creature": "一个本地运行的智能体助手",
+        "creature": "一个本地运行的智能体程序",
         "style": "说人话、务实、有自己判断，不端不装，不说客套话。",
     },
     "storage": {
@@ -76,7 +76,7 @@ DEFAULTS: Dict[str, Any] = {
             "subjects": {
                 "owner": {"max_tier": "danger", "can_grant_persistent": True, "note": "本地管理员"},
                 "assistant": {"max_tier": "write", "can_grant_persistent": False, "note": "上层调用者"},
-                "external": {"max_tier": "write", "can_grant_persistent": False, "note": "外部编码助手"},
+                "external": {"max_tier": "write", "can_grant_persistent": False, "note": "外部编码工具"},
                 "self": {"max_tier": "read", "can_grant_persistent": False, "note": "它自己发起的"},
                 "unknown": {"max_tier": "read", "can_grant_persistent": False, "note": "未识别（按最严）"},
             },

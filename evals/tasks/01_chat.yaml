@@ -14,11 +14,11 @@ tasks:
   - id: chat_identity
     tags: [chat, no_tool]
     input: "你叫什么名字？用一句话回答。"
-    judge: "明确说出自己的名字是「测试助手」，且只花一句话。"
+    judge: "明确说出自己的名字是「测试调用方」，且只花一句话。"
     expect:
       status: done
       no_tools: true
-      answer_any: ["测试助手"]
+      answer_any: ["测试调用方"]
     constraints:
       max_steps: 1
 

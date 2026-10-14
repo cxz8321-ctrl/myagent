@@ -55,12 +55,12 @@ def main() -> int:
 
     print("⑤ L3 档案（多类型）")
     s.profile_set("user", "name", "用户")
-    s.profile_set("zhe", "偏好.doc_format", "docx")
-    s.profile_set("zhe", "在做的项目", {"名字": "myagent", "阶段": "M2"})
-    s.profile_set("zhe", "开发模式", True)
-    p = s.profile_all("zhe")
+    s.profile_set("user", "偏好.doc_format", "docx")
+    s.profile_set("user", "在做的项目", {"名字": "myagent", "阶段": "M2"})
+    s.profile_set("user", "深色模式", True)
+    p = s.profile_all("user")
     check("档案读写正确", p.get("name") == "用户" and p.get("偏好.doc_format") == "docx"
-          and isinstance(p.get("在做的项目"), dict) and p.get("开发模式") is True, str(p))
+          and isinstance(p.get("在做的项目"), dict) and p.get("深色模式") is True, str(p))
 
     print("⑥ 审计")
     s.audit("agent", "memory", "create", "m-1", {"why": "自检"}, approved=True)

@@ -98,7 +98,7 @@ def build_loop(tmp, provider, tools, trace=True, store=None, pricing=None, paral
     prompts = PromptStore(os.path.join(ROOT, "config", "prompts"))
     context = ContextBuilder(budget=Budget(4096, 512), prompts=prompts, keep_last=4)
     return AgentLoop(provider=provider, tools=tools, gate=gate, context=context,
-                     prompt_vars={"name": "测试助手", "creature": "测试助理", "style": "简洁"},
+                     prompt_vars={"name": "测试调用方", "creature": "测试助理", "style": "简洁"},
                      max_steps=6, store=store, retriever=None, writer=None, procedural=None,
                      memory_cfg={"summarize": {"enabled": False}},
                      pricing=pricing or {}, trace_enabled=trace,

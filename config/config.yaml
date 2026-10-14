@@ -42,7 +42,7 @@ context:
 # 系统提示模板的变量（config/prompts/system.md 里用 {{name}} 这类占位）
 prompt:
   name: 骛
-  creature: 一个本地运行的智能体助手
+  creature: 一个本地运行的智能体程序
   style: 说人话、务实、有自己判断，不端不装，不说客套话。
 
 storage:
@@ -83,13 +83,13 @@ memory:
 
 security:
   # 派发者（issuer）→ 权限上限：让本 agent 成为"下位"
-  #   调用者(owner) > 上层助理(assistant) > 外部助手(external) > 自身(self) > 未识别(unknown)
+  #   调用者(owner) > 上层调用方(assistant) > 外部助手(external) > 自身(self) > 未识别(unknown)
   subjects:
     default_issuer: owner
     subjects:
       owner:   {max_tier: danger, can_grant_persistent: true,  note: 本地管理员}
       assistant:      {max_tier: write,  can_grant_persistent: false, note: 上层调用者}
-      external:     {max_tier: write,  can_grant_persistent: false, note: 外部编码助手}
+      external:     {max_tier: write,  can_grant_persistent: false, note: 外部编码工具}
       self:    {max_tier: read,   can_grant_persistent: false, note: 它自己发起的}
       unknown: {max_tier: read,   can_grant_persistent: false, note: 未识别来源（按最严）}
   policy:
